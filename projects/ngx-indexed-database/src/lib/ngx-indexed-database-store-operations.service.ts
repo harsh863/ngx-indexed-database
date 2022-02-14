@@ -67,6 +67,24 @@ export class NgxIndexedDatabaseStoreOperationsService {
     return { success: true };
   }
 
+  public async clear(dbName: string, storeName: string): Promise<{ success: boolean }> {
+    if (!dbName || !storeName) {
+      throw new InvalidArgumentsException();
+    }
+    const indexedDBOpenRequest: IDBOpenDBRequest = indexedDB.open(dbName);
+
+    await HelperUtils.promisifyIndexedDBRequest(indexedDBOpenRequest, 'onsuccess', 'onerror');
+    const database: IDBDatabase = indexedDBOpenRequest.result;
+    const modifiedStoreName: string = HelperUtils.indexedDBStoreNameBuilder(dbName, storeName);
+    const transaction: IDBTransaction = database.transaction(modifiedStoreName, "readwrite");
+    const store: IDBObjectStore = transaction.objectStore(modifiedStoreName);
+    const clearRequest: IDBRequest = store.clear();
+    await HelperUtils.promisifyIndexedDBRequest(clearRequest, 'onsuccess', 'onerror');
+    database?.close();
+
+    return { success: true };
+  }
+
   public async find<T>(dbName: string, storeName: string, value: any): Promise<T | null> {
     if (!dbName || !storeName || !value) {
       throw new InvalidArgumentsException();

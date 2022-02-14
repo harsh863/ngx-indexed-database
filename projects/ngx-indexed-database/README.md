@@ -1,24 +1,181 @@
-# NgxIndexedDatabase
+<div align="center">
+    <img src="https://w3c.github.io/IndexedDB/logo-db.svg" width="120"/>
+</div>
+<h1 align="center">ngx-indexed-database</h1>
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.0.
+<p align="center">
+<b><i>
+ngx-indexed-database ships multiple angular services that ease your interaction with IndexedDB.
+<br>
+Its exposes various promise based method which boosts your productivity many times.
+</i></b>
+</p>
+<p align="center">
+		<a href="https://www.npmjs.com/package/ngx-indexed-database"><img alt="NPM Version" src="https://img.shields.io/npm/v/ngx-indexed-database.svg" height="20"/></a>
+    <a href="https://www.npmjs.com/package/ngx-indexed-database"><img alt="Total downloads" src="https://img.shields.io/npm/dt/ngx-indexed-database.svg" height="20"/></a>
+</p>
 
-## Code scaffolding
+## Usage
 
-Run `ng generate component component-name --project ngx-indexed-database` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-indexed-database`.
-> Note: Don't forget to add `--project ngx-indexed-database` or else it will be added to the default project in your `angular.json` file. 
+### NgxIndexedDatabase module
+<p style="font-size: 16px">Add <code>NgxIndexedDatabaseModule</code> into your NgModule imports:</p>
 
-## Build
+```ts
+import { NgxIndexedDatabaseModule } from "ngx-indexed-database";
 
-Run `ng build ngx-indexed-database` to build the project. The build artifacts will be stored in the `dist/` directory.
+@NgModule({
+  ...
+    imports: [ NgxIndexedDatabaseModule, ... ],
+...
+})
+```
 
-## Publishing
+### NgxIndexedDatabase service
+<p style="font-size: 16px">Import and inject the service in the component where you want to handle store interaction.</p>
 
-After building your library with `ng build ngx-indexed-database`, go to the dist folder `cd dist/ngx-indexed-database` and run `npm publish`.
+```ts
+import { NgxIndexedDatabaseService } from "ngx-indexed-database";
 
-## Running unit tests
+...
+export class XYZComponent {
+  constructor(private _ngxIndexedDBService: NgxIndexedDBService) {}
+}
+```
 
-Run `ng test ngx-indexed-database` to execute the unit tests via [Karma](https://karma-runner.github.io).
+<p style="font-size: 16px"><code>NgxIndexedDatabaseService</code> provides two methods to create and delete data store.</p>
 
-## Further help
+#### Create
+```ts
+import { IndexedDBKeysDataType, IndexedDBStoreSchema, NgxIndexedDatabaseService } from "ngx-indexed-database";
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+...
+
+const dbName = 'ngx-indexed-database';
+const storeName = 'users';
+const version = 1;
+const storeSchema: IndexedDBStoreSchema = {
+  id: { primary: true, unique: true, datatype: IndexedDBKeysDataType.INTEGER },
+  user_name: { datatype: IndexedDBKeysDataType.STRING },
+  email: { datatype: IndexedDBKeysDataType.STRING },
+};
+this._ngxIndexedDBService.createStore(dbName, storeName, version, storeSchema);
+```
+
+#### Delete
+```ts
+import { IndexedDBKeysDataType, IndexedDBStoreSchema, NgxIndexedDatabaseService } from "ngx-indexed-database";
+
+...
+
+const dbName = 'ngx-indexed-database';
+const storeName = 'users';
+const version = 2; // greater than version while creating store.
+this._ngxIndexedDBService.deleteStore(dbName, storeName, version);
+```
+
+### NgxIndexedDatabaseStoreOperations service
+<p style="font-size: 16px">Import and inject the service in the component where you want to manipulate or access store data.</p>
+
+```ts
+import { NgxIndexedDatabaseStoreOperationsService } from "ngx-indexed-database";
+
+...
+export class XYZComponent {
+  constructor(private _ngxIndexedDatabaseStoreOperationsService: NgxIndexedDatabaseStoreOperationsService) {}
+}
+```
+<p style="font-size: 16px"><code>NgxIndexedDatabaseStoreOperationsService</code> provides following methods:</p>
+
+#### upsert
+<p style="font-size: 16px">Insert the new entries in store and update the existing one</p>
+
+```ts
+const data = { id: 1, user_name: 'test123', email: 'test@test.com' }; 
+this._ngxIndexedDatabaseStoreOperationsService.upsert(dbName, storeName, data);
+```
+#### delete
+<p style="font-size: 16px">Delete the entry by primary key</p>
+
+```ts
+this._ngxIndexedDatabaseStoreOperationsService.delete(dbName, storeName, 1);
+```
+#### deleteBy
+<p style="font-size: 16px">Delete the entry by specific key</p>
+
+```ts
+this._ngxIndexedDatabaseStoreOperationsService.deleteBy(dbName, storeName, "user_name", "test123");
+```
+
+#### clear
+<p style="font-size: 16px">Remove all the entries from specified store</p>
+
+```ts
+this._ngxIndexedDatabaseStoreOperationsService.clear(dbName, storeName);
+```
+#### find
+<p style="font-size: 16px">Find the entry by primary key</p>
+
+```ts
+this._ngxIndexedDatabaseStoreOperationsService.find(dbName, storeName, 1);
+```
+#### findBy
+<p style="font-size: 16px">Delete the entry by specific key</p>
+
+```ts
+this._ngxIndexedDatabaseStoreOperationsService.findBy(dbName, storeName, "user_name", "test123");
+```
+#### findMany
+<p style="font-size: 16px">Find the entries by primary keys</p>
+
+```ts
+this._ngxIndexedDatabaseStoreOperationsService.findMany(dbName, storeName, [1, 2, 3]);
+```
+
+#### findManyBy
+<p style="font-size: 16px">Find the entries by specified key</p>
+
+```ts
+this._ngxIndexedDatabaseStoreOperationsService.findManyBy(dbName, storeName, 'user_name', ['test123', 'test456']);
+```
+#### fetchAll
+<p style="font-size: 16px">Return all the entries in specified store</p>
+
+```ts
+this._ngxIndexedDatabaseStoreOperationsService.fetchAll(dbName, storeName);
+```
+
+## Enum
+
+```ts
+export enum IndexedDBKeysDataType {
+  STRING,
+  INTEGER,
+  OBJECT,
+  ARRAY,
+  BOOLEAN,
+  ANY
+}
+```
+
+## Interfaces
+
+```ts
+export interface IndexedDBStoreSchema {
+  [key: string]: {
+    primary?: boolean;
+    unique?: boolean;
+    datatype: IndexedDBKeysDataType
+  }
+}
+```
+
+## Author
+
+<img src="https://avatars.githubusercontent.com/u/53868138?s=400&u=af1bb288033e40fde4f68cfc6ed4b10f7a696316&v=4" alt="Harsh Mittal Github" width="100"/>
+
+**[Harsh Mittal](https://github.com/harsh863/)**
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/harsh863/)
+[![StackOverflow](https://img.shields.io/badge/Stack_Overflow-FE7A16?logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/12774193/harsh-mittal)
+[![DEV](https://img.shields.io/badge/DEV-%23000000.svg?logo=dev.to&logoColor=white)](https://dev.to/harsh863)
+[![Facebook](https://img.shields.io/badge/Facebook-%231877F2.svg?logo=facebook&logoColor=white)](https://www.facebook.com/harsh863)
