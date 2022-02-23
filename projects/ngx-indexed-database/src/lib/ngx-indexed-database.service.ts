@@ -40,14 +40,13 @@ export class NgxIndexedDatabaseService {
       await this.deleteStore(dbName, storeName);
     }
 
-    await this._ngxIndexedDatabaseStoreSchemaService.modifySchemaStore(dbName, storeName, storeSchema);
-
     const version = (await HelperUtils.getDatabaseVersion(dbName)) + 1;
     const indexedDBOpenRequest: IDBOpenDBRequest = indexedDB.open(dbName, version);
 
     await HelperUtils.promisifyIndexedDBRequest(indexedDBOpenRequest, 'onupgradeneeded');
     const database: IDBDatabase = indexedDBOpenRequest.result;
     const store: IDBObjectStore = database.createObjectStore(storeName, { keyPath: primaryKeys[0] });
+    await this._ngxIndexedDatabaseStoreSchemaService.modifySchemaStore(dbName, storeName, storeSchema);
     for (const attribute in storeSchema) {
       if ([IndexedDBKeysDataType.STRING, IndexedDBKeysDataType.INTEGER].includes(storeSchema[attribute].datatype)) {
         store.createIndex(attribute, attribute, { unique: storeSchema[attribute]?.unique || false });
