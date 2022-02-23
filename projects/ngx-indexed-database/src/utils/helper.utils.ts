@@ -1,8 +1,10 @@
 import {IndexedDBStoreSchema} from "../models/IndexedDBStoreSchema";
 
 export class HelperUtils {
-  static indexedDBStoreNameBuilder(dbName: string, storeName: string): string {
-    return `[${dbName.toUpperCase()}] ${storeName}`
+  static getDatabaseVersion(dbName: string): Promise<number> {
+    return (indexedDB as any).databases().then(
+      (databases: { name: string, version: number }[]) => databases.find(database =>  database.name === dbName)?.version || 0
+    );
   }
 
   static getIndexedDBStoreSchemaPrimaryKeys(storeSchema: IndexedDBStoreSchema): string[] {

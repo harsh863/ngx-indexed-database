@@ -18,9 +18,8 @@ export class NgxIndexedDatabaseStoreOperationsService {
 
     await HelperUtils.promisifyIndexedDBRequest(indexedDBOpenRequest, 'onsuccess', 'onerror');
     const database: IDBDatabase = indexedDBOpenRequest.result;
-    const modifiedStoreName: string = HelperUtils.indexedDBStoreNameBuilder(dbName, storeName);
-    const transaction: IDBTransaction = database.transaction(modifiedStoreName, "readwrite");
-    const store: IDBObjectStore = transaction.objectStore(modifiedStoreName);
+    const transaction: IDBTransaction = database.transaction(storeName, "readwrite");
+    const store: IDBObjectStore = transaction.objectStore(storeName);
     const updateRequest: IDBRequest = store.put(data);
     await HelperUtils.promisifyIndexedDBRequest(updateRequest, 'onsuccess', 'onerror');
     database?.close();
@@ -36,9 +35,8 @@ export class NgxIndexedDatabaseStoreOperationsService {
 
     await HelperUtils.promisifyIndexedDBRequest(indexedDBOpenRequest, 'onsuccess', 'onerror');
     const database: IDBDatabase = indexedDBOpenRequest.result;
-    const modifiedStoreName: string = HelperUtils.indexedDBStoreNameBuilder(dbName, storeName);
-    const transaction: IDBTransaction = database.transaction(modifiedStoreName, "readwrite");
-    const store: IDBObjectStore = transaction.objectStore(modifiedStoreName);
+    const transaction: IDBTransaction = database.transaction(storeName, "readwrite");
+    const store: IDBObjectStore = transaction.objectStore(storeName);
     const deleteRequest: IDBRequest = store.delete(value);
     await HelperUtils.promisifyIndexedDBRequest(deleteRequest, 'onsuccess', 'onerror');
     database?.close();
@@ -54,9 +52,8 @@ export class NgxIndexedDatabaseStoreOperationsService {
 
     await HelperUtils.promisifyIndexedDBRequest(indexedDBOpenRequest, 'onsuccess', 'onerror');
     const database: IDBDatabase = indexedDBOpenRequest.result;
-    const modifiedStoreName: string = HelperUtils.indexedDBStoreNameBuilder(dbName, storeName);
-    const transaction: IDBTransaction = database.transaction(modifiedStoreName, "readwrite");
-    const store: IDBObjectStore = transaction.objectStore(modifiedStoreName);
+    const transaction: IDBTransaction = database.transaction(storeName, "readwrite");
+    const store: IDBObjectStore = transaction.objectStore(storeName);
     const primaryKeyIndex: IDBIndex = store.index(key)
     const cursorOpenRequest: IDBRequest = primaryKeyIndex.openCursor(IDBKeyRange.only(value));
     await HelperUtils.promisifyIndexedDBRequest(cursorOpenRequest, 'onsuccess', 'onerror');
@@ -75,9 +72,8 @@ export class NgxIndexedDatabaseStoreOperationsService {
 
     await HelperUtils.promisifyIndexedDBRequest(indexedDBOpenRequest, 'onsuccess', 'onerror');
     const database: IDBDatabase = indexedDBOpenRequest.result;
-    const modifiedStoreName: string = HelperUtils.indexedDBStoreNameBuilder(dbName, storeName);
-    const transaction: IDBTransaction = database.transaction(modifiedStoreName, "readwrite");
-    const store: IDBObjectStore = transaction.objectStore(modifiedStoreName);
+    const transaction: IDBTransaction = database.transaction(storeName, "readwrite");
+    const store: IDBObjectStore = transaction.objectStore(storeName);
     const clearRequest: IDBRequest = store.clear();
     await HelperUtils.promisifyIndexedDBRequest(clearRequest, 'onsuccess', 'onerror');
     database?.close();
@@ -94,9 +90,8 @@ export class NgxIndexedDatabaseStoreOperationsService {
 
     await HelperUtils.promisifyIndexedDBRequest(indexedDBOpenRequest, 'onsuccess', 'onerror');
     const database: IDBDatabase = indexedDBOpenRequest.result;
-    const modifiedStoreName: string = HelperUtils.indexedDBStoreNameBuilder(dbName, storeName);
-    const transaction: IDBTransaction = database.transaction(modifiedStoreName, "readwrite");
-    const store: IDBObjectStore = transaction.objectStore(modifiedStoreName);
+    const transaction: IDBTransaction = database.transaction(storeName, "readwrite");
+    const store: IDBObjectStore = transaction.objectStore(storeName);
     const readRequest: IDBRequest = store.get(value);
     await HelperUtils.promisifyIndexedDBRequest(readRequest, 'onsuccess', 'onerror');
     database?.close();
@@ -112,9 +107,8 @@ export class NgxIndexedDatabaseStoreOperationsService {
 
     await HelperUtils.promisifyIndexedDBRequest(indexedDBOpenRequest, 'onsuccess', 'onerror');
     const database: IDBDatabase = indexedDBOpenRequest.result;
-    const modifiedStoreName: string = HelperUtils.indexedDBStoreNameBuilder(dbName, storeName);
-    const transaction: IDBTransaction = database.transaction(modifiedStoreName, "readwrite");
-    const store: IDBObjectStore = transaction.objectStore(modifiedStoreName);
+    const transaction: IDBTransaction = database.transaction(storeName, "readwrite");
+    const store: IDBObjectStore = transaction.objectStore(storeName);
     const keyIndex = store.index(key);
     const readRequest: IDBRequest = keyIndex.get(value);
     await HelperUtils.promisifyIndexedDBRequest(readRequest, 'onsuccess', 'onerror');
@@ -154,9 +148,8 @@ export class NgxIndexedDatabaseStoreOperationsService {
 
     await HelperUtils.promisifyIndexedDBRequest(indexedDBOpenRequest, 'onsuccess', 'onerror');
     const database: IDBDatabase = indexedDBOpenRequest.result;
-    const modifiedStoreName: string = HelperUtils.indexedDBStoreNameBuilder(dbName, storeName);
-    const transaction: IDBTransaction = database.transaction(modifiedStoreName, "readwrite");
-    const store: IDBObjectStore = transaction.objectStore(modifiedStoreName);
+    const transaction: IDBTransaction = database.transaction(storeName, "readwrite");
+    const store: IDBObjectStore = transaction.objectStore(storeName);
     const readRequest: IDBRequest = store.getAll();
     await HelperUtils.promisifyIndexedDBRequest(readRequest, 'onsuccess', 'onerror');
     database?.close();
