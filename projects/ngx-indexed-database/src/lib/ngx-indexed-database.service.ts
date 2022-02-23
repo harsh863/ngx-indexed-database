@@ -71,6 +71,7 @@ export class NgxIndexedDatabaseService {
     await HelperUtils.promisifyIndexedDBRequest(indexedDBOpenRequest, 'onupgradeneeded');
     const database: IDBDatabase = indexedDBOpenRequest.result;
     database.deleteObjectStore(storeName);
+    await this._ngxIndexedDatabaseStoreSchemaService.removeStoreSchema(dbName, storeName);
     database?.close();
 
     return { success: true };

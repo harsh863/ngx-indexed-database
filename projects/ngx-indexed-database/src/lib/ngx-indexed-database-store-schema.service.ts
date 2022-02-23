@@ -55,4 +55,18 @@ export class NgxIndexedDatabaseStoreSchemaService {
 
     return JSON.parse(decodeURIComponent(readRequest?.result?.schema || null));
   }
+
+  async removeStoreSchema(dbName: string, storeName: string): Promise<{ success: boolean }> {
+    const indexedDBOpenRequest: IDBOpenDBRequest = indexedDB.open(dbName);
+
+    await HelperUtils.promisifyIndexedDBRequest(indexedDBOpenRequest, 'onsuccess', 'onerror');
+    const database: IDBDatabase = indexedDBOpenRequest.result;
+    const transaction: IDBTransaction = database.transaction(SCHEMA_STORE_NAME, "readwrite");
+    const store: IDBObjectStore = transaction.objectStore(SCHEMA_STORE_NAME);
+    const deleteRequest: IDBRequest = store.delete(storeName);
+    await HelperUtils.promisifyIndexedDBRequest(deleteRequest, 'onsuccess', 'onerror');
+    database?.close();
+
+    return { success: true };
+  }
 }
