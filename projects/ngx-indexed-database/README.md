@@ -52,14 +52,15 @@ import { IndexedDBKeysDataType, IndexedDBStoreSchema, NgxIndexedDatabaseService 
 
 const dbName = 'ngx-indexed-database';
 const storeName = 'users';
-const version = 1;
 const storeSchema: IndexedDBStoreSchema = {
   id: { primary: true, unique: true, datatype: IndexedDBKeysDataType.INTEGER },
   user_name: { datatype: IndexedDBKeysDataType.STRING },
   email: { datatype: IndexedDBKeysDataType.STRING },
 };
-this._ngxIndexedDBService.createStore(dbName, storeName, version, storeSchema);
+this._ngxIndexedDBService.createStore(dbName, storeName, storeSchema);
 ```
+
+<p style="font-size: 15px"><strong>Note: </strong>Whenever store schema is updated old store will be migrated to newer version.</p>
 
 #### Delete
 ```ts
@@ -69,8 +70,7 @@ import { IndexedDBKeysDataType, IndexedDBStoreSchema, NgxIndexedDatabaseService 
 
 const dbName = 'ngx-indexed-database';
 const storeName = 'users';
-const version = 2; // greater than version while creating store.
-this._ngxIndexedDBService.deleteStore(dbName, storeName, version);
+this._ngxIndexedDBService.deleteStore(dbName, storeName);
 ```
 
 ### NgxIndexedDatabaseStoreOperations service
@@ -90,7 +90,7 @@ export class XYZComponent {
 <p style="font-size: 16px">Insert the new entries in store and update the existing one</p>
 
 ```ts
-const data = { id: 1, user_name: 'test123', email: 'test@test.com' }; 
+const data = { id: 1, user_name: 'test123', email: 'test@test.com' };
 this._ngxIndexedDatabaseStoreOperationsService.upsert(dbName, storeName, data);
 ```
 #### delete
