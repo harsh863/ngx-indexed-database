@@ -5,9 +5,9 @@ import {HelperUtils} from "../utils/helper.utils";
 import {PrimaryKeysCountException} from "../exceptions/PrimaryKeysCountException";
 import {IndexedDBKeysDataType} from "../enums/IndexedDBKeysDataType";
 import {NgxIndexedDatabaseStoreSchemaService} from "./ngx-indexed-database-store-schema.service";
-import {isEqual} from "lodash";
 import {SCHEMA_STORE_NAME} from "../constants/schema-store.constant";
 import {InvalidStoreNameException} from "../exceptions/InvalidStoreNameException";
+import {areIdentical} from "../utils/is-equal.utils";
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +38,7 @@ export class NgxIndexedDatabaseService {
 
     await this._ngxIndexedDatabaseStoreSchemaService.defineSchemasStore(dbName);
     const alreadyExistingSchema = await this._ngxIndexedDatabaseStoreSchemaService.getStoreSchema(dbName, storeName);
-    const ifSchemasIdentical = isEqual(alreadyExistingSchema, storeSchema);
+    const ifSchemasIdentical = areIdentical(alreadyExistingSchema, storeSchema);
 
     if (ifSchemasIdentical) {
       return { success: true };

@@ -1,16 +1,12 @@
 {
   "name": "ngx-indexed-database",
-  "version": "0.0.38",
+  "version": "0.0.39",
   "peerDependencies": {
     "@angular/common": "^12.2.0",
     "@angular/core": "^12.2.0"
   },
   "dependencies": {
-    "tslib": "^2.3.0",
-    "lodash": "^4.17.21"
-  },
-  "devDependencies": {
-    "@types/lodash": "^4.14.178"
+    "tslib": "^2.3.0"
   },
   "keywords": [
     "angular",
