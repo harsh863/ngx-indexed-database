@@ -156,4 +156,22 @@ export class NgxIndexedDatabaseStoreOperationsService {
 
     return readRequest?.result || [];
   }
+
+  public async resetStores(dbName: string, options?: { exclude?: string[]; only?: string[]; }): Promise<any> {
+    if (!dbName) {
+      throw new InvalidArgumentsException();
+    }
+
+    const indexedDBOpenRequest: IDBOpenDBRequest = indexedDB.open(dbName);
+
+    await HelperUtils.promisifyIndexedDBRequest(indexedDBOpenRequest, 'onsuccess', 'onerror');
+    const database: IDBDatabase = indexedDBOpenRequest.result;
+    const allObjectStoreNames: string[] = (Object.values({...database.objectStoreNames}) as string[]);
+    const objectStoreNamesToBeCleared: string[] = allObjectStoreNames
+      .filter((storeName: string) => (options?.only || allObjectStoreNames).includes(storeName) && !(options?.exclude || []).includes(storeName))
+    database?.close();
+
+    const objectStoreClearRequests = objectStoreNamesToBeCleared.map((storeName: string) => this.clear(dbName, storeName));
+    return Promise.all(objectStoreClearRequests);
+  }
 }

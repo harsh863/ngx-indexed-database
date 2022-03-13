@@ -13,8 +13,16 @@ import {InvalidStoreNameException} from "../exceptions/InvalidStoreNameException
   providedIn: 'root'
 })
 export class NgxIndexedDatabaseService {
+  private static _instance: NgxIndexedDatabaseService;
 
   constructor(private _ngxIndexedDatabaseStoreSchemaService: NgxIndexedDatabaseStoreSchemaService) { }
+
+  public static getInstance(): NgxIndexedDatabaseService {
+    if (!this._instance) {
+      this._instance = new NgxIndexedDatabaseService(new NgxIndexedDatabaseStoreSchemaService());
+    }
+    return this._instance;
+  }
 
   public async createStore(dbName: string, storeName: string, storeSchema: IndexedDBStoreSchema): Promise<{ success: boolean }> {
     if (!dbName || !storeName) {

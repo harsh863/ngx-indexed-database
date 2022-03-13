@@ -41,6 +41,12 @@ export class XYZComponent {
   constructor(private _ngxIndexedDBService: NgxIndexedDBService) {}
 }
 ```
+<p style="font-size: 16px">or</p>
+<p style="font-size: 16px">You can get instance of service using this:</p>
+
+```ts
+const ngxIndexedDBService = NgxIndexedDBService.getInstance();
+```
 
 <p style="font-size: 16px"><code>NgxIndexedDatabaseService</code> provides two methods to create and delete data store.</p>
 
@@ -142,6 +148,26 @@ this._ngxIndexedDatabaseStoreOperationsService.findManyBy(dbName, storeName, 'us
 
 ```ts
 this._ngxIndexedDatabaseStoreOperationsService.fetchAll(dbName, storeName);
+```
+
+#### resetStores
+<p style="font-size: 16px">Clear data from all the stores in specified database.</p>
+
+```ts
+this._ngxIndexedDatabaseStoreOperationsService.resetStores(dbName);
+
+this._ngxIndexedDatabaseStoreOperationsService.resetStores(dbName, {
+    exclude: ['ABC']
+});
+
+this._ngxIndexedDatabaseStoreOperationsService.resetStores(dbName, {
+  only: ['DEF']
+});
+
+this._ngxIndexedDatabaseStoreOperationsService.resetStores(dbName, {
+  exclude: ['ABC'],
+  only: ['DEF']
+});
 ```
 
 ## Enum
