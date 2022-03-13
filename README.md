@@ -163,11 +163,6 @@ this._ngxIndexedDatabaseStoreOperationsService.resetStores(dbName, {
 this._ngxIndexedDatabaseStoreOperationsService.resetStores(dbName, {
   only: ['DEF']
 });
-
-this._ngxIndexedDatabaseStoreOperationsService.resetStores(dbName, {
-  exclude: ['ABC'],
-  only: ['DEF']
-});
 ```
 
 ## Enum

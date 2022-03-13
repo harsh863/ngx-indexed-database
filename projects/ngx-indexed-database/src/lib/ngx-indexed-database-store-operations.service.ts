@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {InvalidArgumentsException} from "../exceptions/InvalidArgumentsException";
 import {HelperUtils} from "../utils/helper.utils";
+import {isExcludeConfig, StoresResetOptions} from "../types/stores-reset-options.type";
 
 @Injectable({
   providedIn: 'root'
@@ -157,7 +158,7 @@ export class NgxIndexedDatabaseStoreOperationsService {
     return readRequest?.result || [];
   }
 
-  public async resetStores(dbName: string, options?: { exclude?: string[]; only?: string[]; }): Promise<any> {
+  public async resetStores(dbName: string, options?: StoresResetOptions): Promise<any> {
     if (!dbName) {
       throw new InvalidArgumentsException();
     }
@@ -168,7 +169,16 @@ export class NgxIndexedDatabaseStoreOperationsService {
     const database: IDBDatabase = indexedDBOpenRequest.result;
     const allObjectStoreNames: string[] = (Object.values({...database.objectStoreNames}) as string[]);
     const objectStoreNamesToBeCleared: string[] = allObjectStoreNames
-      .filter((storeName: string) => (options?.only || allObjectStoreNames).includes(storeName) && !(options?.exclude || []).includes(storeName))
+      .filter(
+        (storeName: string) =>
+        options ?
+          (
+            isExcludeConfig(options) ?
+            !(options.exclude || []).includes(storeName) :
+            (options.only || allObjectStoreNames).includes(storeName)
+          ) :
+          true
+      )
     database?.close();
 
     const objectStoreClearRequests = objectStoreNamesToBeCleared.map((storeName: string) => this.clear(dbName, storeName));

@@ -96,7 +96,7 @@ export class XYZComponent {
 <p style="font-size: 16px">Insert the new entries in store and update the existing one</p>
 
 ```ts
-const data = { id: 1, user_name: 'test123', email: 'test@test.com' }; 
+const data = { id: 1, user_name: 'test123', email: 'test@test.com' };
 this._ngxIndexedDatabaseStoreOperationsService.upsert(dbName, storeName, data);
 ```
 #### delete
@@ -157,15 +157,10 @@ this._ngxIndexedDatabaseStoreOperationsService.fetchAll(dbName, storeName);
 this._ngxIndexedDatabaseStoreOperationsService.resetStores(dbName);
 
 this._ngxIndexedDatabaseStoreOperationsService.resetStores(dbName, {
-    exclude: ['ABC']
+  exclude: ['ABC']
 });
 
 this._ngxIndexedDatabaseStoreOperationsService.resetStores(dbName, {
-  only: ['DEF']
-});
-
-this._ngxIndexedDatabaseStoreOperationsService.resetStores(dbName, {
-  exclude: ['ABC'],
   only: ['DEF']
 });
 ```
